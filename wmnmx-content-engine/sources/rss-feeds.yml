@@ -1,0 +1,40 @@
+# WMNMX RSS feed sources
+
+# Use RSS first when available. RSS is stable, timestamped, and easier for AI agents to process than raw pages.
+# Add or remove feeds after manual review.
+
+security:
+  - name: CISA Alerts
+    url: https://www.cisa.gov/news.xml
+    priority: high
+    notes: Public cybersecurity advisories. Translate only practical items for beginners.
+  - name: FTC Consumer Alerts
+    url: https://consumer.ftc.gov/consumer-alerts/feed
+    priority: high
+    notes: Useful for scams, fraud, identity theft, and consumer safety.
+
+ai_productivity:
+  - name: OpenAI News
+    url: https://openai.com/news/rss.xml
+    priority: high
+    notes: Primary source for OpenAI product updates and announcements.
+  - name: Google Blog
+    url: https://blog.google/rss/
+    priority: medium
+    notes: Use only AI, productivity, safety, education, or consumer tech updates.
+  - name: Microsoft Blog
+    url: https://blogs.microsoft.com/feed/
+    priority: medium
+    notes: Use only Copilot, productivity, accessibility, security, or small-business updates.
+
+social_commerce:
+  - name: Shopify Blog
+    url: https://www.shopify.com/blog.atom
+    priority: medium
+    notes: Use only beginner-friendly commerce, payments, trust, and small-business topics.
+
+review_rules:
+  - Prefer official feeds over media summaries.
+  - Reject feed items without clear publication date when recency matters.
+  - Do not copy article text. Summarize and transform into original educational content.
+  - Log rejected feed items in daily rejected sources when they are considered but not used.
