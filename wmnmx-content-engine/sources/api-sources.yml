@@ -1,0 +1,52 @@
+# WMNMX public API sources
+
+# APIs are preferred over scraping when they are official, public, and allowed by their terms.
+# Add credentials only through Cursor/automation secrets, never in this file.
+
+tech_discovery:
+  - name: Hacker News Algolia API
+    base_url: https://hn.algolia.com/api/v1/search_by_date
+    auth: none
+    priority: medium
+    use_for:
+      - AI product launches
+      - developer tools
+      - security incidents
+      - productivity tools
+    caution: Use as discovery only. Verify important claims with primary sources.
+
+  - name: GitHub Search API
+    base_url: https://api.github.com/search/repositories
+    auth: optional_token
+    priority: medium
+    use_for:
+      - emerging open-source tools
+      - security tooling
+      - AI productivity projects
+    caution: Do not turn GitHub trends into recommendations unless the tool is understandable and useful for WMNMX.
+
+video_discovery:
+  - name: YouTube RSS by Channel
+    base_url: https://www.youtube.com/feeds/videos.xml?channel_id=
+    auth: none
+    priority: medium
+    use_for:
+      - official product tutorials
+      - platform education
+      - beginner-friendly explainers
+    caution: Use official or high-trust channels. Avoid hype channels and guru-style content.
+
+future_optional:
+  - name: Reddit API
+    auth: required
+    priority: low
+    use_for:
+      - trend discovery only
+    caution: Do not use private communities, personal stories, or unsupported claims as source material.
+
+api_rules:
+  - Prefer official APIs or public unauthenticated endpoints.
+  - Use APIs for discovery, then verify with primary sources.
+  - Never store credentials in repository files.
+  - Respect rate limits and platform terms.
+  - Do not collect personal data.
