@@ -18,6 +18,7 @@ from pathlib import Path
 from datetime import datetime
 
 REQUIRED_FILES = [
+    "00_signals-ranked.json",
     "01_research-summary.md",
     "02_posts-ready.md",
     "03_visual-briefs.md",
@@ -27,15 +28,22 @@ REQUIRED_FILES = [
     "07_editorial-notes.md",
 ]
 
-POST_TYPES = ["Señal verificada", "Explícamelo fácil", "Reto de 10 minutos"]
-REQUIRED_POST_FIELDS = ["hook", "explicación", "por qué", "acción", "pregunta"]
+CONTENT_MODES = [
+    "señal verificada", "senal verificada", "explícamelo fácil", "explicamelo facil",
+    "reto de 10 minutos", "alerta práctica", "alerta practica", "mito vs realidad",
+    "checklist guardable", "caso aplicado", "pregunta detonadora", "mini clase",
+]
+REQUIRED_POST_FIELDS = ["hook", "explicación", "explicacion", "por qué", "por que", "acción", "accion", "pregunta"]
 SPANISH_MARKERS = ["para", "mujeres", "acción", "pregunta", "fuente", "explicación", "esto", "hoy"]
 DIGITAL_TERMS = [
     "phishing", "ghosting", "love bombing", "DM", "prompt", "deepfake", "2FA", "passkey",
     "malware", "scam", "bot", "chatbot", "workflow", "no-code", "low-code",
     "social commerce", "e-commerce", "marketplace", "lead", "checkout", "link-in-bio"
 ]
-PROHIBITED_SOURCE_HINTS = ["paywall", "login", "private facebook", "grupo privado", "seo blog", "rumor"]
+PROHIBITED_SOURCE_HINTS = [
+    "paywall", "login", "private facebook", "grupo privado", "seo blog", "rumor",
+    "content farm", "contenido privado", "sin fuente"
+]
 
 
 def find_project_root(start: Path) -> Path:
@@ -64,35 +72,55 @@ def read(path: Path) -> str:
         return ""
 
 
-def score_quality_text(text: str) -> list[str]:
-    issues = []
-    totals = [int(x) for x in re.findall(r"(?:total|score|puntaje)[^0-9]{0,20}(\d{1,2})\s*/\s*30", text, flags=re.I)]
-    if not totals:
-        totals = [int(x) for x in re.findall(r"(\d{1,2})\s*/\s*30", text)]
-    low = [x for x in totals if x < 24]
-    if low:
-        issues.append(f"Quality scores below 24/30 found: {low}")
-    if not totals:
-        issues.append("No quality totals were detected. Add scores in 0-30 format.")
+def load_json_array(path: Path, label: str) -> tuple[list[dict], list[str]]:
+    if not path.exists():
+        return [], [f"{label} missing"]
+    try:
+        data = json.loads(read(path))
+    except Exception as e:
+        return [], [f"{label} is not valid JSON: {e}"]
+    if not isinstance(data, list):
+        return [], [f"{label} must be a JSON array"]
+    return data, []
+
+
+def validate_ranked_signals(path: Path) -> list[str]:
+    data, issues = load_json_array(path, "00_signals-ranked.json")
+    if issues:
+        return issues
+    if not data:
+        issues.append("00_signals-ranked.json is empty")
+    required = ["topic", "source_name", "summary", "audience_fit", "novelty_score", "decision", "decision_reason"]
+    use_or_backup = 0
+    for idx, item in enumerate(data):
+        if not isinstance(item, dict):
+            issues.append(f"Signal item {idx} is not an object")
+            continue
+        for key in required:
+            if item.get(key) in (None, ""):
+                issues.append(f"Signal item {idx} missing {key}")
+        if item.get("decision") in {"use", "backup"}:
+            use_or_backup += 1
+        for score_key in ["audience_fit", "novelty_score"]:
+            try:
+                score = int(item.get(score_key, -1))
+            except Exception:
+                issues.append(f"Signal item {idx} has invalid {score_key}")
+                continue
+            if score < 0 or score > 5:
+                issues.append(f"Signal item {idx} {score_key} must be 0-5")
+    if use_or_backup == 0:
+        issues.append("No usable or backup signals were selected")
     return issues
 
 
 def validate_sources_json(path: Path) -> list[str]:
-    issues = []
-    if not path.exists():
-        return ["sources-used.json missing"]
-    try:
-        data = json.loads(read(path))
-    except Exception as e:
-        return [f"04_sources-used.json is not valid JSON: {e}"]
-
-    if not isinstance(data, list):
-        return ["04_sources-used.json must be a JSON array"]
-
-    if len(data) == 0:
+    data, issues = load_json_array(path, "04_sources-used.json")
+    if issues:
+        return issues
+    if not data:
         issues.append("04_sources-used.json is empty")
-
-    required = ["source_name", "source_url", "source_type", "claim_used"]
+    required = ["source_name", "source_type", "claim_used", "trust_reason"]
     for idx, item in enumerate(data):
         if not isinstance(item, dict):
             issues.append(f"Source item {idx} is not an object")
@@ -100,6 +128,8 @@ def validate_sources_json(path: Path) -> list[str]:
         for key in required:
             if not item.get(key):
                 issues.append(f"Source item {idx} missing {key}")
+        if not item.get("source_url") and item.get("source_type") != "manual-intake":
+            issues.append(f"Source item {idx} missing source_url")
         joined = " ".join(str(v).lower() for v in item.values())
         if any(hint in joined for hint in PROHIBITED_SOURCE_HINTS):
             issues.append(f"Source item {idx} may violate source policy")
@@ -109,9 +139,8 @@ def validate_sources_json(path: Path) -> list[str]:
 def validate_posts(text: str) -> list[str]:
     issues = []
     lower = text.lower()
-    for post_type in POST_TYPES:
-        if post_type.lower() not in lower:
-            issues.append(f"Missing post type: {post_type}")
+    if not any(mode in lower for mode in CONTENT_MODES):
+        issues.append("No recognized content mode detected in posts-ready")
     for field in REQUIRED_POST_FIELDS:
         if field.lower() not in lower:
             issues.append(f"Posts may be missing required field: {field}")
@@ -120,10 +149,37 @@ def validate_posts(text: str) -> list[str]:
         issues.append("Output may not be sufficiently Spanish or community-facing")
     for term in DIGITAL_TERMS:
         if term.lower() in lower:
-            # Require a nearby colon, dash, parentheses, or explanation word in the same paragraph.
-            pattern = re.compile(rf"{re.escape(term)}[^\n]{{0,120}}(:|significa|es |sirve|se refiere|una |un )", re.I)
+            pattern = re.compile(rf"{re.escape(term)}[^\n]{{0,160}}(:|significa|es |sirve|se refiere|una |un )", re.I)
             if not pattern.search(text):
                 issues.append(f"Digital term appears without simple explanation: {term}")
+    return issues
+
+
+def score_quality_text(text: str) -> list[str]:
+    issues = []
+    totals = [int(x) for x in re.findall(r"(?:total|score|puntaje)[^0-9]{0,20}(\d{1,2})\s*/\s*40", text, flags=re.I)]
+    if not totals:
+        totals = [int(x) for x in re.findall(r"(\d{1,2})\s*/\s*40", text)]
+    low = [x for x in totals if x < 32]
+    if low:
+        issues.append(f"Quality scores below 32/40 found: {low}")
+    if not totals:
+        issues.append("No quality totals were detected. Add scores in 0-40 format.")
+    lower = text.lower()
+    if "novelty" not in lower and "novedad" not in lower:
+        issues.append("Quality score should include novelty score")
+    if "audience" not in lower and "audiencia" not in lower:
+        issues.append("Quality score should include audience fit")
+    return issues
+
+
+def validate_editorial_notes(text: str) -> list[str]:
+    issues = []
+    lower = text.lower()
+    expected = ["repet", "audiencia", "editor", "fuente"]
+    for marker in expected:
+        if marker not in lower:
+            issues.append(f"Editorial notes may be missing marker: {marker}")
     return issues
 
 
@@ -174,6 +230,8 @@ def main() -> int:
         if not (folder / filename).exists():
             issues.append(f"Missing required file: {filename}")
 
+    issues.extend(validate_ranked_signals(folder / "00_signals-ranked.json"))
+
     posts_text = read(folder / "02_posts-ready.md")
     if posts_text:
         issues.extend(validate_posts(posts_text))
@@ -181,6 +239,10 @@ def main() -> int:
     quality_text = read(folder / "06_quality-score.md")
     if quality_text:
         issues.extend(score_quality_text(quality_text))
+
+    notes_text = read(folder / "07_editorial-notes.md")
+    if notes_text:
+        issues.extend(validate_editorial_notes(notes_text))
 
     issues.extend(validate_sources_json(folder / "04_sources-used.json"))
 
