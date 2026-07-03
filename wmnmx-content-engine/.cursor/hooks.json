@@ -1,0 +1,3 @@
+{
+  "wmnmx_note": "Fase 2 placeholder. Keep hooks inactive until the daily output is stable. Use .cursor/hooks.example.json as the implementation reference after confirming the exact Cursor hooks schema in your installed version."
+}

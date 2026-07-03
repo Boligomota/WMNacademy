@@ -1,0 +1,88 @@
+---
+description: WMNMX verified source policy for daily research and content automation.
+alwaysApply: true
+---
+
+# WMNMX Source Policy
+
+Use verified public sources only.
+
+The goal is not to scrape more. The goal is to monitor credible sources and translate useful signals into practical learning.
+
+## Allowed sources
+
+Allowed:
+
+- public pages
+- RSS feeds
+- official documentation
+- official blogs
+- government institutions
+- universities
+- public security advisories
+- reputable media
+- platform help centers
+- public business and technology reports
+- official product announcements
+- official support documentation
+
+## Preferred source types
+
+Prioritize:
+
+- official
+- institutional
+- university
+- platform documentation
+- high-trust media
+- public regulatory or safety advisory
+- primary source over secondary source
+
+## Not allowed
+
+Do not use:
+
+- private Facebook groups
+- login-protected pages
+- paywalled content
+- restricted pages
+- mass scraping
+- copied full articles
+- undated content
+- rumor-based content
+- viral posts without primary source
+- generic SEO blogs
+- content farms
+- anonymous claims
+- pages with aggressive affiliate intent
+
+## Required metadata
+
+Every finding must include:
+
+- source name
+- source URL
+- publication date or access date
+- source type
+- reason why the source is trusted
+- claim extracted
+- practical relevance for women 40+ in Mexico
+
+## Rejection behavior
+
+If a source is rejected, log it in:
+
+`/content/daily/YYYY-MM-DD/05_sources-rejected.md`
+
+Include:
+
+- source name
+- URL if available
+- rejection reason
+- replacement source if found
+
+## Copyright behavior
+
+Do not copy full articles or large passages.
+
+Summarize, cite, translate, and transform into original educational content.

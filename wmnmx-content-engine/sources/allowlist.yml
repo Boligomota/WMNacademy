@@ -1,0 +1,53 @@
+# WMNMX verified source allowlist
+
+security:
+  official:
+    - condusef.gob.mx
+    - inai.org.mx
+    - banxico.org.mx
+    - gob.mx
+    - cisa.gov
+    - ftc.gov
+    - safety.google
+    - support.google.com
+    - microsoft.com/security
+    - support.microsoft.com
+    - facebook.com/help
+    - about.meta.com
+    - whatsapp.com/security
+    - instagram.com/safety
+
+ai_productivity:
+  official:
+    - openai.com
+    - help.openai.com
+    - platform.openai.com/docs
+    - blog.google
+    - ai.google
+    - support.google.com
+    - microsoft.com
+    - support.microsoft.com
+    - learn.microsoft.com
+    - about.meta.com
+    - ai.meta.com
+    - anthropic.com
+    - docs.anthropic.com
+    - cursor.com/docs
+
+social_commerce:
+  official:
+    - business.facebook.com
+    - facebook.com/help
+    - about.meta.com
+    - help.instagram.com
+    - business.instagram.com
+    - whatsapp.com/business
+    - faq.whatsapp.com
+    - linkedin.com/help
+    - business.linkedin.com
+    - amvo.org.mx
+    - inegi.org.mx
+    - shopify.com
+    - mercadopago.com.mx
+    - stripe.com/docs
+    - paypal.com/mx

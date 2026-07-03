@@ -1,0 +1,88 @@
+---
+description: WMNMX translation and digital literacy policy for English research transformed into Spanish output.
+alwaysApply: true
+---
+
+# WMNMX Translation Policy
+
+Research may be in English or Spanish.
+
+Final output must be Spanish, simple, clear, and Mexico-aware.
+
+Do not translate every digital term.
+
+## Rule
+
+Keep the original digital term when the audience will encounter that term online. Explain it immediately in Spanish.
+
+Format:
+
+`Term: explicación sencilla en español.`
+
+## Keep and explain
+
+Keep these terms when useful:
+
+- phishing
+- ghosting
+- love bombing
+- DM
+- prompt
+- deepfake
+- two-factor authentication / 2FA
+- passkey
+- malware
+- scam
+- bot
+- chatbot
+- workflow
+- no-code
+- low-code
+- social commerce
+- e-commerce
+- marketplace
+- lead
+- checkout
+- link-in-bio
+- algorithm
+- feed
+- privacy settings
+- password manager
+
+## Examples
+
+Bad:
+
+"Autenticación multifactorial para mitigar vectores de ataque."
+
+Good:
+
+"Activa la verificación en dos pasos: es como ponerle doble cerradura a tu cuenta."
+
+Bad:
+
+"Suplantación de identidad por anzuelo digital."
+
+Good:
+
+"Phishing: una estafa donde alguien se hace pasar por tu banco, Facebook o una tienda para robarte datos."
+
+Bad:
+
+"Entrada conversacional de modelo generativo."
+
+Good:
+
+"Prompt: la instrucción que le das a una IA para que te ayude a escribir, ordenar ideas o resolver una tarea."
+
+Bad:
+
+"Comercio social omnicanal con embudo de conversión."
+
+Good:
+
+"Social commerce: vender desde redes sociales usando publicaciones, mensajes directos, catálogos y links de pago."
+
+## Style
+
+Use plain Spanish. Explain like a practical mentor, not like a dictionary.

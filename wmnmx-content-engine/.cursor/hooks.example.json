@@ -1,0 +1,11 @@
+{
+  "hooks": {
+    "afterAgentFinish": [
+      {
+        "name": "validate-wmnmx-daily-output",
+        "description": "Validate the latest WMNMX daily output package after the automation run finishes.",
+        "command": "python3 .cursor/skills/wmnmx-daily-content-automation/scripts/validate_daily_output.py --latest"
+      }
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+[
+  {
+    "source_name": "Sample Official Source",
+    "source_url": "https://example.com",
+    "source_type": "official",
+    "publication_date": "2026-06-29",
+    "access_date": "2026-06-29",
+    "claim_used": "Sample claim",
+    "trust_reason": "Official sample",
+    "used_for_post": "senal-verificada",
+    "source_quality_score": 5
+  }
+]

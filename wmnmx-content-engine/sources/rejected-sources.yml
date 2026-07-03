@@ -1,0 +1,16 @@
+# WMNMX rejected source patterns
+
+rejected_patterns:
+  - private Facebook groups
+  - login-protected pages
+  - paywalled pages
+  - undated articles for current topics
+  - generic SEO blogs
+  - rumor-based posts
+  - viral social posts without primary source
+  - content farms
+  - affiliate-heavy listicles
+  - full article copying
+
+notes:
+  - Rejections during daily runs should be logged in /content/daily/YYYY-MM-DD/05_sources-rejected.md.
