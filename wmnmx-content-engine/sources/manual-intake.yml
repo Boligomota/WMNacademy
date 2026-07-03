@@ -1,0 +1,39 @@
+# WMNMX manual intake policy
+
+# Use this for links, notes, or insights provided by the team or moderators.
+# This is the safe way to bring audience context into the automation without scraping private Facebook group content.
+
+allowed_manual_inputs:
+  - public links shared by the team
+  - official announcements found manually
+  - questions frequently asked by group members, rewritten as summaries
+  - repeated confusions or objections observed by moderators
+  - performance notes from previously published posts
+  - newsletter links the team has permission to use
+
+not_allowed_manual_inputs:
+  - copied private Facebook posts
+  - screenshots containing personal information
+  - member names, phone numbers, emails, or identifiable details
+  - private messages
+  - login-protected content pasted in full
+  - paywalled article text copied into the repo
+
+recommended_format:
+  folder: content/inbox/YYYY-MM-DD/
+  file: manual-signals.md
+  fields:
+    - date
+    - submitted_by
+    - signal_summary
+    - public_url_if_available
+    - audience_question_or_need
+    - suggested_topic
+    - privacy_check
+    - permission_notes
+
+privacy_rule:
+  Summarize the insight. Do not copy private member content.
+
+editorial_rule:
+  Manual intake is context, not automatically a source. If the final post makes a factual claim, verify it with a public trustworthy source.
