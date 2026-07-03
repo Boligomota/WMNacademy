@@ -1,74 +1,97 @@
 # WMNMX Content Engine
 
-Sistema editorial automatizado para **WMNMX**, un grupo privado de Facebook para mujeres +40 en México enfocado en adopción tecnológica, seguridad digital, IA, productividad, reinvención profesional y social commerce.
+Sistema editorial automatizado para **WMNMX**, un grupo privado de Facebook para mujeres +40 en Mexico enfocado en adopcion tecnologica, seguridad digital, IA, productividad, reinvencion profesional y social commerce.
 
-Este repositorio está diseñado para funcionar en Cursor con:
+Este repositorio esta disenado para funcionar en Cursor como una **redaccion editorial automatizada con criterio**, no como autoposter ni como scraper agresivo.
 
-- **Rules**: política editorial persistente.
-- **Skills**: manuales operativos y workflows reutilizables.
-- **Subagents**: investigadores especializados.
-- **MCP**: conexión controlada a herramientas externas.
-- **Hooks**: validación y logging, fase 2.
-- **Automation**: motor programado diario.
-- **Memories**: contexto persistente mínimo.
-- **Human Review**: última capa de criterio.
+## Principio estrategico actualizado
 
-## Principio estratégico
+La automatizacion no debe empezar todos los dias con una busqueda libre. Debe operar sobre una bandeja de senales confiables.
 
-Cursor no debe operar como autoposter. Debe operar como una **redacción editorial automatizada con criterio**.
-
-El flujo correcto:
+Flujo recomendado:
 
 ```txt
-fuente verificada
-→ traducción digital clara
-→ utilidad para mujeres +40
-→ acción de 10 minutos
-→ revisión humana
-→ publicación con intención
+fuentes permitidas
+-> bandeja de senales
+-> verificacion y deduplicacion
+-> novelty score
+-> ajuste con feedback real del grupo
+-> traduccion digital clara
+-> utilidad para mujeres +40
+-> accion practica
+-> revision humana
+-> publicacion manual con intencion
 ```
 
-## Instalación en Cursor
+## Arquitectura del sistema
 
-1. Abre este folder como workspace en Cursor.
-2. Revisa que Cursor detecte:
-   - `.cursor/rules/`
-   - `.cursor/skills/`
-   - `.cursor/agents/`
-3. En Cursor, ve a **Rules, Skills, Subagents** y confirma que aparecen las Rules, Skills y Subagents del proyecto.
-4. En **Automations**, crea una nueva Automation.
-5. Selecciona este repo como repository: `wmnmx-content-engine`.
-6. Agrega un trigger **Scheduled** a las 6:00 am CDMX.
-7. Pega el prompt de `prompts/automation-master.md` en **Agent Instructions**.
-8. Guarda la Automation.
-9. Configura Memories usando `prompts/memories.md`.
-10. Corre primero el prompt de prueba en `prompts/test-run.md`.
-11. Revisa el output en `/content/daily/test-run-YYYY-MM-DD/`.
-12. Activa la Automation diaria solo cuando el output pase revisión.
+El proyecto combina:
 
-## Herramientas recomendadas en Cursor
+- **Rules**: politica editorial, fuentes y traduccion persistente.
+- **Skills**: workflows reutilizables para investigacion, seleccion y produccion.
+- **Subagents**: investigadores especializados por tema y por etapa.
+- **Signal Inbox**: bandeja diaria de senales provenientes de RSS, APIs, busqueda controlada y aportes manuales.
+- **Editorial Memory**: historial local de temas, fuentes, publicaciones y rechazos para evitar repeticion.
+- **Audience Feedback**: notas semanales de preguntas, dudas y conversaciones reales del grupo.
+- **Quality Gate**: evaluacion de fuente, claridad, utilidad, relevancia, conversacion y novedad.
+- **Human Review**: ultima capa de criterio antes de publicar.
+
+## Que si debe hacer
+
+- Monitorear fuentes publicas verificadas.
+- Usar RSS y APIs como primera opcion.
+- Usar web search/fetch de forma controlada.
+- Usar scraping solo en paginas publicas cuando no exista RSS/API.
+- Rechazar grupos privados, paywalls, paginas con login y contenido sin fuente primaria.
+- Generar contenido en espanol claro, contextualizado para mujeres +40 en Mexico.
+- Mantener terminos digitales en ingles cuando ayudan a la alfabetizacion digital, explicandolos en espanol.
+- Producir contenido listo para revision humana, no para publicacion automatica.
+
+## Que no debe hacer
+
+- No publicar directamente en Facebook.
+- No conectar Facebook en fase 1.
+- No scrapear grupos privados.
+- No depender de una sola fuente o de busquedas libres cada dia.
+- No generar tres posts por obligacion si solo hay una senal realmente fuerte.
+- No repetir temas sin novelty score.
+- No usar miedo, tono condescendiente ni lenguaje de guru.
+
+## Herramientas recomendadas
 
 Fase 1:
 
 - Web Search Tool: ON
 - Web Fetch Tool: ON
-- Chrome DevTools MCP: ON, solo para verificación puntual
-- context7: ON, para documentación técnica actualizada
-- sequential-thinking: ON, para scoring y razonamiento de calidad
+- RSS/API intake mediante archivos en `sources/`
+- Chrome DevTools MCP: ON solo para verificacion puntual
+- context7: ON para documentacion tecnica actualizada
+- sequential-thinking: ON para scoring y razonamiento editorial
 
-Mantener fuera del flujo en fase 1:
+Mantener fuera del flujo inicial:
 
 - meta-mcp
 - mercadopago-mcp-server
-- supabase como dependencia crítica
+- supabase como dependencia critica
 - vercel
+
+Fase 2:
+
+- n8n para poblar `content/inbox/` desde RSS/APIs.
+- Hooks para validacion estructural.
+- Base editorial local en `content/database/`.
+
+Fase 3:
+
+- Supabase o Airtable si el volumen y el historial editorial ya justifican una base externa.
 
 ## Output diario esperado
 
-Cada corrida debe generar:
+Cada corrida debe generar, como minimo:
 
 ```txt
 /content/daily/YYYY-MM-DD/
+  00_signals-ranked.json
   01_research-summary.md
   02_posts-ready.md
   03_visual-briefs.md
@@ -84,13 +107,42 @@ Fase 2, con hooks:
 /content/daily/YYYY-MM-DD/08_hook-validation.md
 ```
 
-## Importante
+## Carpetas nuevas clave
 
-- No publicar directamente en Facebook.
-- No conectar Facebook en fase 1.
-- No scrapear grupos privados, paywalls, páginas con login ni fuentes restringidas.
-- El output final debe estar en español claro, sencillo y contextual para mujeres +40 en México.
-- Mantener términos digitales clave en inglés cuando sean necesarios para alfabetización digital, explicándolos de inmediato en español.
+```txt
+content/inbox/              # senales capturadas antes de redactar
+content/database/           # historial local de temas, fuentes y publicaciones
+content/audience-insights/  # feedback semanal del grupo
+sources/rss-feeds.yml       # feeds RSS permitidos
+sources/api-sources.yml     # APIs publicas permitidas
+sources/manual-intake.yml   # reglas para aportes manuales
+```
+
+## Modos editoriales
+
+Ademas de la formula base, el sistema puede producir distintos modos segun la senal:
+
+- Senal verificada
+- Explicamelo facil
+- Reto de 10 minutos
+- Alerta practica
+- Mito vs realidad
+- Checklist guardable
+- Caso aplicado
+- Pregunta detonadora
+- Mini clase
+
+## Instalacion en Cursor
+
+1. Abre este folder como workspace en Cursor.
+2. Revisa que Cursor detecte `.cursor/rules/`, `.cursor/skills/` y `.cursor/agents/`.
+3. Configura Tools y MCPs segun la fase.
+4. Revisa y ajusta `sources/rss-feeds.yml`, `sources/api-sources.yml` y `sources/manual-intake.yml`.
+5. Pega `prompts/automation-master.md` en Agent Instructions.
+6. Configura Memories usando `prompts/memories.md`.
+7. Corre primero `prompts/test-run.md`.
+8. Revisa el paquete en `content/daily/test-run-YYYY-MM-DD/`.
+9. Activa la Automation diaria solo cuando el output pase revision.
 
 **Love Academy**  
-*Siente Más*
+*Siente Mas*
