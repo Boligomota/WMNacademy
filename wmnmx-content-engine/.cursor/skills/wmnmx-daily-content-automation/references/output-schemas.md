@@ -73,4 +73,3 @@ Include:
 - source concerns
 - what the human editor must verify before scheduling
 - suggested manual update to `content/database/` after publishing
-```
