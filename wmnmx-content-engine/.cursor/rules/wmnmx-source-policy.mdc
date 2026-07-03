@@ -9,12 +9,24 @@ Use verified public sources only.
 
 The goal is not to scrape more. The goal is to monitor credible sources and translate useful signals into practical learning.
 
+## Source priority order
+
+1. RSS feeds listed in `sources/rss-feeds.yml`.
+2. Public APIs listed in `sources/api-sources.yml`.
+3. Manual links or notes listed through `sources/manual-intake.yml`, when they are public or permitted.
+4. Official documentation, blogs, help centers, institutions, universities, public reports, and security advisories.
+5. Reputable media only when they cite or link to a primary source.
+6. Public pages with clear date and low extraction risk.
+
+Use web search/fetch to verify and complete context, not as the only discovery method.
+
 ## Allowed sources
 
 Allowed:
 
 - public pages
 - RSS feeds
+- public APIs
 - official documentation
 - official blogs
 - government institutions
@@ -25,6 +37,7 @@ Allowed:
 - public business and technology reports
 - official product announcements
 - official support documentation
+- manual links provided by the team when public or permitted
 
 ## Preferred source types
 
@@ -48,25 +61,46 @@ Do not use:
 - restricted pages
 - mass scraping
 - copied full articles
-- undated content
+- undated content for current topics
 - rumor-based content
 - viral posts without primary source
 - generic SEO blogs
 - content farms
 - anonymous claims
 - pages with aggressive affiliate intent
+- scraping that ignores robots.txt or target-site limits
+
+## Manual intake rules
+
+Human-provided links or notes are allowed only when:
+
+- the content is public, or the team has permission to use it;
+- no private personal information is included;
+- the note summarizes the insight instead of copying private posts;
+- the final output transforms the insight into original educational content.
+
+For private Facebook group insights, use only human-written summaries such as:
+
+- repeated questions;
+- common fears;
+- confusing terms;
+- posts that generated conversation;
+- topics members ask to learn.
+
+Never scrape private group content.
 
 ## Required metadata
 
 Every finding must include:
 
 - source name
-- source URL
+- source URL when available
 - publication date or access date
 - source type
 - reason why the source is trusted
 - claim extracted
 - practical relevance for women 40+ in Mexico
+- novelty note if the topic has appeared recently
 
 ## Rejection behavior
 
